@@ -68,9 +68,14 @@ PAGE_CSS = """
 .gs.step p{font-size:18px;line-height:1.65;color:var(--bg);max-width:24em;margin-top:22px}
 .gs.step .cta{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;margin-top:22px;border-radius:999px;background:var(--accent);color:var(--ink);text-decoration:none;font-size:16px;font-weight:700}
 .gs.step .cta:hover{color:var(--ink);filter:brightness(1.08)}
-.gs .circles{display:flex;justify-content:flex-end;align-items:flex-end;gap:14px;height:220px}
-.gs .circles span{border-radius:50%;border:2px solid var(--white);flex-shrink:0}
-.gs .circles .c4{border:0;background:var(--accent)}
+/* 원 4개(40·72·120·200px + 간격 14px = 474px)를 영역 폭에 대한 비율로 정한다.
+   노트북에선 max-width 덕분에 원래 크기 그대로, 휴대폰에선 네 개가 같은 비율로 함께 작아짐 */
+.gs .circles{display:flex;justify-content:flex-end;align-items:flex-end;gap:min(14px,2.95%);width:100%}
+.gs .circles span{display:block;flex:0 0 auto;height:auto;aspect-ratio:1;border-radius:50%;border:2px solid var(--white)}
+.gs .circles .c1{width:8.44%;max-width:40px}
+.gs .circles .c2{width:15.19%;max-width:72px}
+.gs .circles .c3{width:25.32%;max-width:120px}
+.gs .circles .c4{width:42.19%;max-width:200px;border:0;background:var(--accent)}
 </style>
 """
 c.html(PAGE_CSS)
@@ -244,10 +249,10 @@ c.html("""
     <a class="cta" href="./record" target="_self">기록 한 걸음 보러 가기</a>
   </div>
   <div class="circles" aria-hidden="true">
-    <span class="pp" style="width:40px;height:40px"></span>
-    <span class="pp" style="width:72px;height:72px;--d:.15s"></span>
-    <span class="pp" style="width:120px;height:120px;--d:.3s"></span>
-    <span class="pp c4" style="width:200px;height:200px;--d:.5s"></span>
+    <span class="pp c1"></span>
+    <span class="pp c2" style="--d:.15s"></span>
+    <span class="pp c3" style="--d:.3s"></span>
+    <span class="pp c4" style="--d:.5s"></span>
   </div>
 </section>
 """)
