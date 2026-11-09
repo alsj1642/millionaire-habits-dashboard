@@ -95,15 +95,24 @@ c.html(f"""
     <p class="cap" style="margin-top:-16px">※ Kaggle에 공개된 가상(합성) 데이터예요</p>
     <p class="first"><i aria-hidden="true"></i>이번 주 결정: 가계부 + 습관 기록부터. 이 데이터에서는 백만장자만의 습관이 보이지 않았거든요.</p>
   </div>
-  <div class="stage" id="stage" role="img" aria-label="3줄 3칸으로 놓인 검은 원 가운데 하나가 주황색인 그림. 주황 원은 나를 뜻해요.">
-    <div class="stage-in">{strips}{pops}</div>
+  <!-- 크기 규칙을 요소에 직접 적어 둔다: 페이지 CSS가 늦게 도착해도 원 영역이 화면 전체 폭으로 커지지 않게 -->
+  <div class="stage" id="stage" role="img" aria-label="3줄 3칸으로 놓인 검은 원 가운데 하나가 주황색인 그림. 주황 원은 나를 뜻해요."
+       style="position:relative;width:516px;max-width:100%;aspect-ratio:1;margin-left:auto;overflow:hidden">
+    <div class="stage-in" style="position:absolute;top:0;left:0;width:516px;height:516px;transform-origin:0 0">{strips}{pops}</div>
   </div>
 </section>
 <script>
 (function () {{
   var s = document.getElementById('stage'); if (!s) return;
-  function fit() {{ s.firstElementChild.style.transform = 'scale(' + (s.clientWidth / 516) + ')'; }}
-  fit(); window.addEventListener('resize', fit);
+  // 516px로 그린 그림을 영역 폭에 맞춰 줄인다. 키우지는 않는다(최대 1배).
+  function fit() {{
+    var k = Math.min(1, (s.clientWidth || 516) / 516);
+    s.firstElementChild.style.transform = 'scale(' + k + ')';
+  }}
+  fit();
+  // 영역 크기가 바뀔 때마다(CSS가 늦게 적용될 때, 창 크기를 바꿀 때) 다시 맞춘다
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(s);
+  else window.addEventListener('resize', fit);
 }})();
 </script>
 """, js=True)
